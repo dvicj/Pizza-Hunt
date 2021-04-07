@@ -9,26 +9,29 @@ const $newCommentForm = document.querySelector('#new-comment-form');
 
 let pizzaId;
 
-getPizza = () => {
-  //get id of pizza 
+function getPizza() {
+  // get id of pizza
   const searchParams = new URLSearchParams(document.location.search.substring(1));
   const pizzaId = searchParams.get('id');
 
-  //get pizza info 
+  // get pizzaInfo
   fetch(`/api/pizzas/${pizzaId}`)
     .then(response => {
+      console.log(response);
       if (!response.ok) {
-        throw new Error ({message: 'Something went wrong!'});
+        console.log('hi');
+        throw new Error({ message: 'Something went wrong!' });
       }
-      return response.json(); 
+
+      return response.json();
     })
     .then(printPizza)
     .catch(err => {
       console.log(err);
-      alert('Cannot find a pizza with this id! Taking you back...');
-      window.history.back(); 
+      alert('Cannot find a pizza with this id! Taking you back.');
+      window.history.back();
     });
-};
+}
 
 function printPizza(pizzaData) {
   console.log(pizzaData);
@@ -125,7 +128,7 @@ function handleNewCommentSubmit(event) {
     })
     .then(commentResponse => {
       console.log(commentResponse);
-      location.reload();
+      // location.reload();
     })
     .catch(err => {
       console.log(err);
@@ -149,6 +152,7 @@ function handleNewReplySubmit(event) {
   }
 
   const formData = { writtenBy, replyBody };
+
   fetch(`/api/comments/${pizzaId}/${commentId}`, {
     method: 'PUT',
     headers: {
@@ -170,8 +174,7 @@ function handleNewReplySubmit(event) {
     .catch(err => {
       console.log(err);
     });
-}
-
+  }
 $backBtn.addEventListener('click', function() {
   window.history.back();
 });
@@ -179,4 +182,4 @@ $backBtn.addEventListener('click', function() {
 $newCommentForm.addEventListener('submit', handleNewCommentSubmit);
 $commentSection.addEventListener('submit', handleNewReplySubmit);
 
-getPizza(); 
+getPizza();
